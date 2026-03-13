@@ -1,20 +1,23 @@
+<!-- HEADER BANNER -->
+<div align="center">
+<img src="https://capsule-render.vercel.app/api?type=venom&height=200&color=0:0D1117,50:003344,100:00D9FF&text=Adnane%20Erekraken&fontColor=00D9FF&fontSize=42&fontAlignY=55&desc=AI%20Engineer%20%7C%20MSc%20AI%20%40%20CentraleSupélec&descColor=8B9EA8&descSize=16&descAlignY=75&animation=fadeIn&stroke=00D9FF&strokeWidth=1"/>
+</div>
+
 <div align="center">
 
-<!-- Typing Animation -->
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=28&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&multiline=true&width=700&height=100&lines=Hi+%F0%9F%91%8B+I'm+Adnane+Erekraken;AI+Engineer+%7C+MSc+AI+%40+CentraleSupélec)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=15&duration=3500&pause=800&color=00D9FF&center=true&vCenter=true&width=650&lines=Foundation+Models+%7C+Sim-to-Real+Transfer+%7C+Strategic+AI;%24+python+train.py+--mode+pretrain+--dataset+CWRU+CMAPSS+MFPT;%24+git+push+origin+main+%23+another+late+night+commit;Pretrain+once.+Fine-tune+anywhere.+Deploy+everywhere.)](https://git.io/typing-svg)
 
 <br/>
 
-<!-- Social badges -->
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/adnane-erekraken/)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AdnaneErek)
-[![Email](https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:adnane.erekraken@student-cs.fr)
+[![LinkedIn](https://img.shields.io/badge/─%20linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/adnane-erekraken/)
+[![GitHub](https://img.shields.io/badge/─%20github-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AdnaneErek)
+[![Email](https://img.shields.io/badge/─%20mail-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:adnane.erekraken@student-cs.fr)
 
 </div>
 
 ---
 
-## 🧠 About Me
+## `> whoami`
 
 ```python
 class AdnaneErekraken:
@@ -28,8 +31,8 @@ class AdnaneErekraken:
 
     def current_work(self):
         return [
-            "🔬 GPT-inspired Foundation Model for industrial PHM (CWRU, CMAPSS)",
-            "🌟 POLARIS — AI-powered Strategic Steering & Portfolio Optimization Platform",
+            "⚙️  GPT-inspired Foundation Model for industrial PHM (CWRU, CMAPSS, MFPT)",
+            "🌟  POLARIS — AI-powered Strategic Steering & Portfolio Optimization Platform",
         ]
 
     def philosophy(self):
@@ -38,10 +41,10 @@ class AdnaneErekraken:
 
 ---
 
-## 🚀 Projects
+## `> ls -la ./projects`
 
-### 🌟 POLARIS — Portfolio Optimization & Learning AI for Risk-Adjusted Strategy
-> *An enterprise-grade AI platform for strategic decision-making — think of it as a North Star for steering committees.*
+### `📁 POLARIS/` — Portfolio Optimization & Learning AI for Risk-Adjusted Strategy
+> *Enterprise-grade AI platform for strategic decision-making — a North Star for steering committees.*
 
 - **Monte Carlo** option evaluation with **CVaR10** risk-adjusted scoring
 - Closed-loop **learning system**: outcome capture → forecast recalibration → scoring adaptation
@@ -51,41 +54,41 @@ class AdnaneErekraken:
 
 ---
 
-### ⚙️ Foundation Models for Fault Diagnosis & Prognosis — LGI Lab, CentraleSupélec
+### `📁 PHM-FoundationModel/` — Fault Diagnosis & Prognosis @ LGI Lab, CentraleSupélec
 > *6-month research project (Oct 2025 – Mar 2026) · Team of 4 · HPC-scale training · Two parallel research tracks*
 
-**The core problem:** Traditional PHM models fail to generalize — every new machine or fault type demands a fresh labeled dataset. This mirrors the pre-GPT era in NLP. The goal: build a GPT-inspired model that pretrained once, transfers everywhere.
+**The core problem:** Traditional PHM models fail to generalize — every new machine or fault type demands a fresh labeled dataset. This mirrors the pre-GPT era in NLP. The goal: a model that pretrains once and transfers everywhere.
 
 <details>
-<summary><b>🔍 Phase 1 — Data Leakage Investigation (critical methodological contribution)</b></summary>
+<summary><code>$ cat phase1_leakage_investigation.md</code></summary>
 
 <br/>
 
-> Near-perfect accuracy figures (97–99.99%) in PHM literature looked suspicious. We dug in.
+> Near-perfect accuracy (97–99.99%) in PHM literature looked suspicious. We dug in.
 
 **Two systematic leakage sources identified & corrected:**
 
 | Leakage Type | Root Cause | Fix |
 |---|---|---|
-| **Overlapping window leakage** | Overlapping train/test windows from the same signal → model memorizes waveforms | Non-overlapping windows + signal-level split |
-| **Bearing-level leakage** | CWRU Drive End & Fan End sensors record the same bearing simultaneously, yet are split independently | Group-wise split by physical bearing identity |
+| **Overlapping window leakage** | Overlapping train/test windows from same signal → model memorizes waveforms | Non-overlapping windows + signal-level split |
+| **Bearing-level leakage** | CWRU Drive End & Fan End sensors record same bearing, split independently | Group-wise split by physical bearing identity |
 
 **Quantified impact on MOMENT accuracy (CWRU):**
 
 ```
-Standard protocol (both leakages)  →  98.97%  ████████████████████  
-Fix bearing-level only             →  89.70%  ██████████████████    
-Fix window-level only              →  83.46%  █████████████████     
-Fully leak-free protocol           →  78.73%  ████████████████      
+Standard protocol (both leakages)  →  98.97%  ████████████████████
+Fix bearing-level only             →  89.70%  ██████████████████
+Fix window-level only              →  83.46%  █████████████████
+Fully leak-free protocol           →  78.73%  ████████████████
                                               ↑ 20pp gap = artifactual
 ```
 
-> **Finding:** A large portion of reported SOTA improvements in PHM deep learning are artifactual. Group-wise splitting by physical unit identity should be the new standard.
+> **Finding:** A large fraction of reported SOTA in PHM deep learning is artifactual. Group-wise splitting by physical unit identity should be the community standard.
 
 </details>
 
 <details>
-<summary><b>🏗️ Phase 2 — Architecture Benchmarking & Fine-Tuning Strategy</b></summary>
+<summary><code>$ cat phase2_architecture_benchmark.md</code></summary>
 
 <br/>
 
@@ -99,76 +102,80 @@ Fully leak-free protocol           →  78.73%  ██████████�
 | RoBERTa | Text pretrained, fine-tuned on TS | ~96% (leaky) |
 
 **Task reformulation → multi-label classification:**
-Rather than mutually exclusive fault classes, each sample gets a binary vector `y = [Ball, InnerRace, OuterRace]` — physically realistic, handles co-occurring faults, and reduces class imbalance. Result: **97.38% subset accuracy, Macro-AUC 0.9996** under leak-free protocol.
+Each sample gets binary vector `y = [Ball, InnerRace, OuterRace]` — physically realistic, handles co-occurring faults, reduces class imbalance.
+Result: **97.38% subset accuracy, Macro-AUC 0.9996** under leak-free protocol.
 
-**Fine-tuning strategy that won — Progressive Unfreezing:**
+**Fine-tuning strategy — Progressive Unfreezing:**
 ```
-Stage 1 → Linear probe     (encoder frozen, head only)
-Stage 2 → Partial unfreeze (last transformer block)
-Stage 3 → Full unfreeze    (entire encoder)
+Stage 1 → Linear probe      (encoder frozen, head only)
+Stage 2 → Partial unfreeze  (last transformer block)
+Stage 3 → Full unfreeze     (entire encoder)
 ```
-Preserves pretrained representations, avoids catastrophic forgetting.
+Preserves pretrained representations. Avoids catastrophic forgetting.
 
 </details>
 
 <details>
-<summary><b>🤖 Track 2 (Adnane) — Robot Fault Diagnosis & Sim-to-Real Transfer</b></summary>
+<summary><code>$ cat track2_robot_sim_to_real.md</code> &nbsp;← Adnane's track</summary>
 
 <br/>
 
-**Setup:** 4-DOF robot arm · 9 fault classes (healthy + 4 stuck + 4 steady-state error) · 9-channel trajectory signals (desired, realized, tracking error) · Only simulation data available for training, real robot for evaluation.
+**Setup:** 4-DOF robot arm · 9 fault classes (healthy + 4 stuck + 4 steady-state error) · 9-channel trajectory signals · Sim data only for training, real robot for eval.
 
-**The sim-to-real gap problem:**
-```
-Scratch training on sim data  →  81.94% sim  /  55.56% real  (gap: 26.4pp)
-+ Generic Gaussian noise aug  →  sim ↑        /  48.89% real  (gap WIDENS)
-```
-Generic noise doesn't model the structured physical differences between sim and real.
+**The gap problem:**
+```bash
+$ python eval.py --model scratch --test real
+# Sim: 81.94%  /  Real: 55.56%  /  Gap: 26.4pp
 
-**Physics-informed simulator augmentation (root cause analysis):**
+$ python eval.py --model scratch+gaussian_noise --test real
+# Sim: up       /  Real: 48.89%  /  Gap WIDENS  <- generic noise fails
+```
+
+**Root cause — what makes real != sim:**
 - Actuation delays: sim used fixed 10-step delay → real robot has variable delays
 - Healthy motor noise: sim was deterministic → real has Gaussian steady-state errors
 
-**Fixes implemented in Simulink:**
+**Physics-informed Simulink augmentation:**
 ```python
 holdingTimeIdx  ~ Uniform(2, 30)          # variable actuation delay
-normalMotorErr  ~ Gaussian(μ=0, σ≈1.2)   # discretized to [-3,...,3]
+normalMotorErr  ~ Gaussian(mu=0, sigma=1.2)  # discretized to [-3,...,3]
 faultMagnitude  ~ Uniform(10, 50)         # expanded fault range
 ```
 
-**Training strategy comparison (final results):**
+**Training strategy comparison:**
 
-| Strategy | Sim Accuracy | Real Accuracy | Gap |
+| Strategy | Sim Acc | Real Acc | Gap |
 |---|---|---|---|
 | A1 — Scratch + Full FT (baseline) | 81.94% | 57.78% | 24.2pp |
 | A2 — Scratch + Head Only | **90.19%** | 61.11% | 29.1pp |
 | A3 — Supervised Pretrain + 25% unfreeze | 82.96% | 67.78% | 15.2pp |
-| **A4 — Supervised Pretrain + 50% unfreeze** | 83.33% | **70.00%** | **13.3pp** |
+| **A4 — Supervised Pretrain + 50% unfreeze** | 83.33% | **70.00%** | **13.3pp** ✅ |
 
-> **Key insight:** High simulation accuracy ≠ good real-world performance. A2 hits 90.19% sim but only 61.11% real. Pretraining + partial unfreezing sacrifices sim accuracy but gains +12pp real accuracy — fitting the sim too tightly is **counterproductive** for sim-to-real transfer.
+> **Key insight:** A2 scores 90.19% sim but only 61.11% real. Fitting the simulation too tightly is **counterproductive**. Pretraining + partial unfreezing gains **+12pp real accuracy**.
 
-**Self-supervised objectives tested (both failed):**
+**Self-supervised objectives — both collapsed:**
+```bash
+$ python train.py --objective next_token_prediction   # ~11% (random chance)
+$ python train.py --objective masked_token_prediction  # ~11% (random chance)
+# Trajectory fault signatures require labeled pretraining.
+# Generic reconstruction losses don't learn fault-discriminative features.
 ```
-Next-token prediction (GPT-style)   →  ~11%  (random chance)
-Masked-token prediction (BERT-style) →  ~11%  (random chance)
-```
-Trajectory fault signatures require labeled pretraining — generic reconstruction losses don't learn fault-discriminative features.
 
 </details>
 
 <details>
-<summary><b>🌐 Track 1 — General-Purpose Multi-Dataset Foundation Model</b></summary>
+<summary><code>$ cat track1_multidataset_foundation_model.md</code></summary>
 
 <br/>
 
 **Datasets aggregated for pretraining:**
-`CWRU` · `PRONOSTIA/FEMTO` · `CMAPSS (NASA)` · `MFPT` · *(gear & battery datasets in progress)*
+`CWRU` · `PRONOSTIA/FEMTO` · `CMAPSS (NASA)` · `MFPT` · *(gear & battery in progress)*
 
 **Objective:** Masked reconstruction pretraining across heterogeneous PHM domains — mechanical vibration → thermal degradation → aerodynamic performance.
 
-**Key finding:** Multi-dataset pretrained model outperforms single-dataset pretraining on **held-out datasets not seen during pretraining** — early evidence of genuine cross-domain transfer.
+**Key result:** Multi-dataset pretrained model outperforms single-dataset pretraining on **held-out datasets not seen during pretraining** — early evidence of genuine cross-domain transfer.
 
-**Scale challenge:** 12M+ rows of time-series data · ~2hrs/epoch on single GPU · Training on La Ruche HPC (SLURM)
+**Scale:** 12M+ rows · ~2 hrs/epoch on single GPU · La Ruche HPC (SLURM)
 
 </details>
 
@@ -182,7 +189,7 @@ Trajectory fault signatures require labeled pretraining — generic reconstructi
 
 ---
 
-### 🎵 Bach2BeethovenAI — Music Generation
+### `📁 Bach2BeethovenAI/` — AI Music Generation
 > *BiLSTM trained on MIDI corpora to generate stylistically consistent classical compositions.*
 
 - Tokenization via `music21`, temperature-based sampling, MIDI → WAV automation
@@ -190,33 +197,36 @@ Trajectory fault signatures require labeled pretraining — generic reconstructi
 
 ---
 
-### 📈 LSTM Demand Forecasting — Marjane Holding
-> *End-to-end supply chain forecasting system deployed in production.*
+### `📁 demand-forecasting/` — LSTM Supply Chain @ Marjane Holding
+> *End-to-end demand forecasting system deployed in production.*
 
-- LSTM-based demand forecasting reducing stock-outs across import planning
+- LSTM-based forecasting reducing stock-outs across import planning
 - Power BI dashboard centralizing cost, delay & seasonality KPIs
 - Stack: `Python` `PyTorch` `Power BI` `SQL`
 
 ---
 
-## 🛠️ Tech Stack
+## `> cat ./stack.json`
 
 <div align="center">
 
-### Languages & Frameworks
+**`// languages & frameworks`**
+
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
 ![Keras](https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
 
-### Data & Visualization
+**`// data & viz`**
+
 ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
 ![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)
 ![PowerBI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
 
-### DevOps & Tools
+**`// devops & infra`**
+
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
@@ -224,7 +234,8 @@ Trajectory fault signatures require labeled pretraining — generic reconstructi
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 ![PowerShell](https://img.shields.io/badge/PowerShell-5391FE?style=for-the-badge&logo=powershell&logoColor=white)
 
-### Platforms & Environments
+**`// platforms`**
+
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![MATLAB](https://img.shields.io/badge/MATLAB-0076A8?style=for-the-badge&logo=mathworks&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
@@ -233,56 +244,46 @@ Trajectory fault signatures require labeled pretraining — generic reconstructi
 
 ---
 
-## 📊 GitHub Stats
+## `> htop --filter=github`
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=AdnaneErek&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true"/>
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AdnaneErek&layout=compact&theme=tokyonight&hide_border=true"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=AdnaneErek&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true&title_color=00D9FF&icon_color=00D9FF"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AdnaneErek&layout=compact&theme=tokyonight&hide_border=true&title_color=00D9FF"/>
 
 </div>
 
 <div align="center">
 
-[![GitHub Streak](https://streak-stats.demolab.com/?user=AdnaneErek&theme=tokyonight&hide_border=true)](https://git.io/streak-stats)
+[![GitHub Streak](https://streak-stats.demolab.com/?user=AdnaneErek&theme=tokyonight&hide_border=true&ring=00D9FF&fire=00D9FF&currStreakLabel=00D9FF)](https://git.io/streak-stats)
 
 </div>
 
 ---
 
-## 🏆 Certifications
+## `> crontab -l  # certifications`
 
-| Badge | Certification | Issuer |
-|-------|--------------|--------|
-| 📊 | Data Science Job Simulation | Boston Consulting Group |
-| 💼 | Strategy Consulting Job Simulation | Boston Consulting Group |
-| 📈 | Power BI Data Analyst Professional Certificate | Microsoft |
-| 🗂️ | Google Project Management Specialization | Google |
-| 💻 | Client Needs & Software Requirements | University of Alberta |
+| `cert_id` | Title | Issuer |
+|-----------|-------|--------|
+| `BCG-DS` | Data Science Job Simulation | Boston Consulting Group |
+| `BCG-SC` | Strategy Consulting Job Simulation | Boston Consulting Group |
+| `MS-PBI` | Power BI Data Analyst Professional Certificate | Microsoft |
+| `GGL-PM` | Google Project Management Specialization | Google |
+| `UA-SWE` | Client Needs & Software Requirements | University of Alberta |
 
 ---
 
-## 💬 Random Dev Quote
+## `> tail -f /var/log/activity.log`
 
 <div align="center">
 
-[![Readme Quotes](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=tokyonight)](https://github.com/piyushsuthar/github-readme-quotes)
+[![Adnane's Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=AdnaneErek&theme=tokyo-night&hide_border=true&area=true&custom_title=──%20commit%20log%20──)](https://github.com/AdnaneErek)
 
 </div>
 
 ---
 
-## 📡 Contribution Activity
-
-<div align="center">
-
-[![Adnane's Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=AdnaneErek&theme=tokyo-night&hide_border=true&area=true&custom_title=Contribution%20Graph)](https://github.com/AdnaneErek)
-
-</div>
-
----
-
-## 🐍 Contribution Snake
+## `> ./snake --watch`
 
 <div align="center">
 
@@ -296,12 +297,22 @@ Trajectory fault signatures require labeled pretraining — generic reconstructi
 
 ---
 
+## `> fortune | cowsay`
+
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,50:00D9FF,100:0D1117&height=120&section=footer&animation=twinkling"/>
+[![Readme Quotes](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=tokyonight)](https://github.com/piyushsuthar/github-readme-quotes)
+
+</div>
+
+---
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00D9FF,50:003344,100:0D1117&height=120&section=footer&animation=twinkling"/>
 
 ![Visitor Count](https://komarev.com/ghpvc/?username=AdnaneErek&color=00d9ff&style=for-the-badge&label=PROFILE+VIEWS)
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=14&duration=4000&pause=1000&color=00D9FF&center=true&vCenter=true&width=600&lines=Foundation+Models+%7C+Sim-to-Real+Transfer+%7C+Strategic+AI;Pretrain+once.+Deploy+everywhere.;Building+systems+that+think%2C+learn%2C+and+explain+themselves.)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=13&duration=4000&pause=1000&color=00D9FF&center=true&vCenter=true&width=620&lines=%24+echo+%22Pretrain+once.+Deploy+everywhere.%22;%24+python+-c+%22import+life%3B+life.optimize()%22;%24+git+commit+-m+%22building+the+future%2C+one+model+at+a+time%22)](https://git.io/typing-svg)
 
 </div>

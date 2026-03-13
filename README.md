@@ -51,13 +51,134 @@ class AdnaneErekraken:
 
 ---
 
-### 🔬 GPT-Inspired Foundation Model for Industrial PHM
-> *Self-supervised time-series foundation model for fault diagnosis & prognosis — generalizing across industrial machines.*
+### ⚙️ Foundation Models for Fault Diagnosis & Prognosis — LGI Lab, CentraleSupélec
+> *6-month research project (Oct 2025 – Mar 2026) · Team of 4 · HPC-scale training · Two parallel research tracks*
 
-- Transformer-based architecture pretrained on **CWRU**, **CMAPSS** & multimodal maintenance logs
-- Unified preprocessing pipelines: raw signals, spectrograms, and textual logs
-- Large-scale self-supervised pretraining on **MESCO HPC** cluster
-- Stack: `PyTorch` `Transformers` `HPC/Linux` `Signal Processing`
+**The core problem:** Traditional PHM models fail to generalize — every new machine or fault type demands a fresh labeled dataset. This mirrors the pre-GPT era in NLP. The goal: build a GPT-inspired model that pretrained once, transfers everywhere.
+
+<details>
+<summary><b>🔍 Phase 1 — Data Leakage Investigation (critical methodological contribution)</b></summary>
+
+<br/>
+
+> Near-perfect accuracy figures (97–99.99%) in PHM literature looked suspicious. We dug in.
+
+**Two systematic leakage sources identified & corrected:**
+
+| Leakage Type | Root Cause | Fix |
+|---|---|---|
+| **Overlapping window leakage** | Overlapping train/test windows from the same signal → model memorizes waveforms | Non-overlapping windows + signal-level split |
+| **Bearing-level leakage** | CWRU Drive End & Fan End sensors record the same bearing simultaneously, yet are split independently | Group-wise split by physical bearing identity |
+
+**Quantified impact on MOMENT accuracy (CWRU):**
+
+```
+Standard protocol (both leakages)  →  98.97%  ████████████████████  
+Fix bearing-level only             →  89.70%  ██████████████████    
+Fix window-level only              →  83.46%  █████████████████     
+Fully leak-free protocol           →  78.73%  ████████████████      
+                                              ↑ 20pp gap = artifactual
+```
+
+> **Finding:** A large portion of reported SOTA improvements in PHM deep learning are artifactual. Group-wise splitting by physical unit identity should be the new standard.
+
+</details>
+
+<details>
+<summary><b>🏗️ Phase 2 — Architecture Benchmarking & Fine-Tuning Strategy</b></summary>
+
+<br/>
+
+**Models benchmarked under leak-free protocol:**
+
+| Model | Pretraining | Accuracy (leak-free) |
+|---|---|---|
+| GPT4TS | Time-series patches on GPT-2 backbone | — |
+| **MOMENT** | Masked autoencoder on large TS corpus | **78.73%** → **97.38%** (multi-label) |
+| NuTime | Transformer on UCR/UEA datasets | — |
+| RoBERTa | Text pretrained, fine-tuned on TS | ~96% (leaky) |
+
+**Task reformulation → multi-label classification:**
+Rather than mutually exclusive fault classes, each sample gets a binary vector `y = [Ball, InnerRace, OuterRace]` — physically realistic, handles co-occurring faults, and reduces class imbalance. Result: **97.38% subset accuracy, Macro-AUC 0.9996** under leak-free protocol.
+
+**Fine-tuning strategy that won — Progressive Unfreezing:**
+```
+Stage 1 → Linear probe     (encoder frozen, head only)
+Stage 2 → Partial unfreeze (last transformer block)
+Stage 3 → Full unfreeze    (entire encoder)
+```
+Preserves pretrained representations, avoids catastrophic forgetting.
+
+</details>
+
+<details>
+<summary><b>🤖 Track 2 (Adnane) — Robot Fault Diagnosis & Sim-to-Real Transfer</b></summary>
+
+<br/>
+
+**Setup:** 4-DOF robot arm · 9 fault classes (healthy + 4 stuck + 4 steady-state error) · 9-channel trajectory signals (desired, realized, tracking error) · Only simulation data available for training, real robot for evaluation.
+
+**The sim-to-real gap problem:**
+```
+Scratch training on sim data  →  81.94% sim  /  55.56% real  (gap: 26.4pp)
++ Generic Gaussian noise aug  →  sim ↑        /  48.89% real  (gap WIDENS)
+```
+Generic noise doesn't model the structured physical differences between sim and real.
+
+**Physics-informed simulator augmentation (root cause analysis):**
+- Actuation delays: sim used fixed 10-step delay → real robot has variable delays
+- Healthy motor noise: sim was deterministic → real has Gaussian steady-state errors
+
+**Fixes implemented in Simulink:**
+```python
+holdingTimeIdx  ~ Uniform(2, 30)          # variable actuation delay
+normalMotorErr  ~ Gaussian(μ=0, σ≈1.2)   # discretized to [-3,...,3]
+faultMagnitude  ~ Uniform(10, 50)         # expanded fault range
+```
+
+**Training strategy comparison (final results):**
+
+| Strategy | Sim Accuracy | Real Accuracy | Gap |
+|---|---|---|---|
+| A1 — Scratch + Full FT (baseline) | 81.94% | 57.78% | 24.2pp |
+| A2 — Scratch + Head Only | **90.19%** | 61.11% | 29.1pp |
+| A3 — Supervised Pretrain + 25% unfreeze | 82.96% | 67.78% | 15.2pp |
+| **A4 — Supervised Pretrain + 50% unfreeze** | 83.33% | **70.00%** | **13.3pp** |
+
+> **Key insight:** High simulation accuracy ≠ good real-world performance. A2 hits 90.19% sim but only 61.11% real. Pretraining + partial unfreezing sacrifices sim accuracy but gains +12pp real accuracy — fitting the sim too tightly is **counterproductive** for sim-to-real transfer.
+
+**Self-supervised objectives tested (both failed):**
+```
+Next-token prediction (GPT-style)   →  ~11%  (random chance)
+Masked-token prediction (BERT-style) →  ~11%  (random chance)
+```
+Trajectory fault signatures require labeled pretraining — generic reconstruction losses don't learn fault-discriminative features.
+
+</details>
+
+<details>
+<summary><b>🌐 Track 1 — General-Purpose Multi-Dataset Foundation Model</b></summary>
+
+<br/>
+
+**Datasets aggregated for pretraining:**
+`CWRU` · `PRONOSTIA/FEMTO` · `CMAPSS (NASA)` · `MFPT` · *(gear & battery datasets in progress)*
+
+**Objective:** Masked reconstruction pretraining across heterogeneous PHM domains — mechanical vibration → thermal degradation → aerodynamic performance.
+
+**Key finding:** Multi-dataset pretrained model outperforms single-dataset pretraining on **held-out datasets not seen during pretraining** — early evidence of genuine cross-domain transfer.
+
+**Scale challenge:** 12M+ rows of time-series data · ~2hrs/epoch on single GPU · Training on La Ruche HPC (SLURM)
+
+</details>
+
+**Stack:**
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white)
+![SciPy](https://img.shields.io/badge/SciPy-8CAAE6?style=flat-square&logo=scipy&logoColor=white)
+![MATLAB](https://img.shields.io/badge/Simulink-0076A8?style=flat-square&logo=mathworks&logoColor=white)
+![Linux](https://img.shields.io/badge/HPC_SLURM-FCC624?style=flat-square&logo=linux&logoColor=black)
 
 ---
 
@@ -151,10 +272,36 @@ class AdnaneErekraken:
 
 ---
 
+## 📡 Contribution Activity
+
 <div align="center">
+
+[![Adnane's Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=AdnaneErek&theme=tokyo-night&hide_border=true&area=true&custom_title=Contribution%20Graph)](https://github.com/AdnaneErek)
+
+</div>
+
+---
+
+## 🐍 Contribution Snake
+
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AdnaneErek/AdnaneErek/output/github-contribution-grid-snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AdnaneErek/AdnaneErek/output/github-contribution-grid-snake.svg" />
+  <img alt="github-snake" src="https://raw.githubusercontent.com/AdnaneErek/AdnaneErek/output/github-contribution-grid-snake-dark.svg" />
+</picture>
+
+</div>
+
+---
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,50:00D9FF,100:0D1117&height=120&section=footer&animation=twinkling"/>
 
 ![Visitor Count](https://komarev.com/ghpvc/?username=AdnaneErek&color=00d9ff&style=for-the-badge&label=PROFILE+VIEWS)
 
-*"Build systems that think, learn, and explain themselves."*
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=14&duration=4000&pause=1000&color=00D9FF&center=true&vCenter=true&width=600&lines=Foundation+Models+%7C+Sim-to-Real+Transfer+%7C+Strategic+AI;Pretrain+once.+Deploy+everywhere.;Building+systems+that+think%2C+learn%2C+and+explain+themselves.)](https://git.io/typing-svg)
 
 </div>

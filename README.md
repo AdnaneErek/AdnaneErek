@@ -197,12 +197,71 @@ $ python train.py --objective masked_token_prediction  # ~11% (random chance)
 
 ---
 
-### `📁 demand-forecasting/` — LSTM Supply Chain @ Marjane Holding
-> *End-to-end demand forecasting system deployed in production.*
+### `📁 Melanoma_Detection_ISIC2019/` — Image + Metadata Fusion with ResNet-50 & Lightning
+> *Multimodal deep learning pipeline for the ISIC 2019 melanoma classification challenge.*
 
-- LSTM-based forecasting reducing stock-outs across import planning
-- Power BI dashboard centralizing cost, delay & seasonality KPIs
-- Stack: `Python` `PyTorch` `Power BI` `SQL`
+Fuses **dermoscopic images** (224×224, hair-removed) with **patient metadata** (age, sex, anatomical site) through a late-fusion classifier trained on multi-GPU nodes with PyTorch Lightning DDP.
+
+<details>
+<summary><code>$ cat architecture.md</code></summary>
+
+<br/>
+
+**Multimodal fusion pipeline:**
+```
+Images (224×224) ──► ResNet-50 (ImageNet pretrained) ──► 2048-dim features ──┐
+                                                                               ├──► Fusion (256) ──► 8 classes
+Metadata (age/sex/site) ──► MLP encoder ──────────────── 128-dim features ──┘
+```
+
+**Two-stage training strategy:**
+```
+Epoch 0–2  →  Warm-up       (backbone frozen, head only)
+Epoch ≥3   →  Fine-tuning   (full model, layer-wise LR decay)
+```
+
+**Metrics logged to TensorBoard:** Accuracy · Macro F1 · Weighted F1 · Per-class P/R/F1 · AUROC · Confusion matrix
+
+**Grad-CAM** visualization — side-by-side (original + heatmap) for model interpretability.
+
+**Distributed training:** DDP-compatible with SLURM (`srun python ...`)
+
+</details>
+
+<details>
+<summary><code>$ tree Melanoma_Detection_ISIC2019/</code></summary>
+
+<br/>
+
+```
+Melanoma_Detection_ISIC2019/
+├── src/
+│   ├── train/
+│   │   ├── train.py              # Training script
+│   │   ├── lightning_module.py   # Lightning module
+│   │   └── gradcam.py            # Grad-CAM script
+│   ├── models/
+│   │   └── combined_model.py     # ResNet + MLP fusion
+│   └── dataset/
+│       └── isic_dataset.py       # Image+metadata dataset
+├── processed/
+│   ├── images_224_nohair/        # Preprocessed images
+│   └── splits/
+│       ├── train.csv
+│       └── val.csv
+├── checkpoints/                  # Best and final models
+├── logs/                         # TensorBoard + CSV logs
+├── requirements.txt
+└── README.md
+```
+
+</details>
+
+**Stack:**
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![Lightning](https://img.shields.io/badge/Lightning-792EE5?style=flat-square&logo=lightning&logoColor=white)
+![TensorBoard](https://img.shields.io/badge/TensorBoard-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)
+![Linux](https://img.shields.io/badge/HPC_DDP-FCC624?style=flat-square&logo=linux&logoColor=black)
 
 ---
 
@@ -248,7 +307,7 @@ $ python train.py --objective masked_token_prediction  # ~11% (random chance)
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=AdnaneErek&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true&title_color=00D9FF&icon_color=00D9FF"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=AdnaneErek&show_icons=true&theme=tokyonight&count_private=true&hide_border=true&title_color=00D9FF&icon_color=00D9FF&rank_icon=github"/>
 <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AdnaneErek&layout=compact&theme=tokyonight&hide_border=true&title_color=00D9FF"/>
 
 </div>

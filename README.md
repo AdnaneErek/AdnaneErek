@@ -307,8 +307,8 @@ Melanoma_Detection_ISIC2019/
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=AdnaneErek&show_icons=true&theme=tokyonight&count_private=true&hide_border=true&title_color=00D9FF&icon_color=00D9FF&rank_icon=github&cache_seconds=1800"/>
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AdnaneErek&layout=compact&theme=tokyonight&hide_border=true&title_color=00D9FF&cache_seconds=1800"/>
+<img height="180em" src="https://github-readme-stats-three-teal-87.vercel.app/api?username=AdnaneErek&show_icons=true&theme=tokyonight&count_private=true&hide_border=true&title_color=00D9FF&icon_color=00D9FF&rank_icon=github"/>
+<img height="180em" src="https://github-readme-stats-three-teal-87.vercel.app/api/top-langs/?username=AdnaneErek&layout=compact&theme=tokyonight&hide_border=true&title_color=00D9FF"/>
 
 </div>
 

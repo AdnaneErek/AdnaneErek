@@ -31,7 +31,8 @@ class AdnaneErekraken:
 
     def current_work(self):
         return [
-            "⚙️  GPT-inspired Foundation Model for industrial PHM (CWRU, CMAPSS, MFPT)",
+            "🤖  The Blessing of Noise — Sim-to-Real transfer for robot fault diagnosis",
+            "🔬  PHM Foundation Model — Cross-domain generalization across CWRU, CMAPSS, MFPT",
             "🌟  POLARIS — AI-powered Strategic Steering & Portfolio Optimization Platform",
         ]
 
@@ -43,21 +44,80 @@ class AdnaneErekraken:
 
 ## `> ls -la ./projects`
 
-### `📁 POLARIS/` — Portfolio Optimization & Learning AI for Risk-Adjusted Strategy
-> *Enterprise-grade AI platform for strategic decision-making — a North Star for steering committees.*
+---
 
-- **Monte Carlo** option evaluation with **CVaR10** risk-adjusted scoring
-- Closed-loop **learning system**: outcome capture → forecast recalibration → scoring adaptation
-- Executive-grade **PDF SteerCo reports**, interactive dashboards & conversational interface
-- Built-in **guardrails**: budget, capacity, compliance & governance checks
-- Stack: `Python` `Pandas` `scikit-learn` `Streamlit` `Plotly` `ReportLab` `Gemini API`
+### `📁 blessing-of-noise/` — Sim-to-Real Transfer for Robot Fault Diagnosis
+> *MSc Research Project · CentraleSupélec LGI Lab · Oct 2025 – Apr 2026*
+> **[`github.com/AdnaneErek/blessing-of-noise`](https://github.com/AdnaneErek/blessing-of-noise)**
+
+**The core problem:** Real fault data for industrial robots is scarce — fewer than 200 labeled samples across 9 fault classes. Simulators can generate thousands of labeled trajectories, but models trained on clean simulation fail badly on real hardware. The sim-to-real gap dominates performance.
+
+**The insight:** The solution isn't a better model. It's a noisier simulator.
+
+<details>
+<summary><code>$ cat framework.md</code></summary>
+
+<br/>
+
+**Four sequential steps, each motivated by the previous:**
+
+**Step 0 — Baseline:** LSTM + feature engineering achieves 89% sim accuracy but only 53% real accuracy. A 36 pp gap confirms this is a distribution problem, not a feature problem.
+
+**Step 1 — Model Selection:** RmGPT vs. MOMENT. RmGPT's variable-channel inductive bias preserves physical channel identity throughout the transformer — critical for multivariate trajectory fault diagnosis. MOMENT flattens all channels into homogeneous tokens, destroying motor-specific structure. Result: RmGPT +19.7 pp over MOMENT on real data.
+
+**Step 2 — Structured Noise Injection:** Two physics-informed interventions in Simulink:
+```python
+holdingTimeIdx  ~  Uniform(2, 30)           # variable actuation delay (was fixed at 10)
+normalMotorErr  ~  Gaussian(mu=0, sigma=1.2) # discretized to [-3,...,3]
+```
+Two lines of MATLAB. **+12.2 pp real accuracy.** The simulation distribution expands to cover real-world variability. This is the blessing of noise.
+
+**Step 3 — Pretraining Objective:** MTP warm-up (not to convergence) → supervised classification on simulation. Self-supervised objectives alone (NTP, MTP) don't learn fault-discriminative features. The two-phase approach does.
+
+**Step 4 — Progressive Fine-Tuning:** Freeze early backbone layers (preserve sim knowledge) + unfreeze last 50% + head with decoupled learning rates:
+```
+η_backbone = 5×10⁻⁷  |  η_head = 5×10⁻⁶  |  cosine decay, 20 epochs
+```
+
+</details>
+
+<details>
+<summary><code>$ python eval.py --full-results</code></summary>
+
+<br/>
+
+| Configuration | Real Acc. |
+|---|---|
+| LSTM (raw) | 13.61% |
+| Moment (scratch) | 28.11% |
+| RmGPT (scratch) | 47.78% |
+| LSTM + features | 53.33% |
+| + Full noisy sim | 61.11% |
+| Pretrain + 50% UF | 70.00% |
+| Cross-robot (standard) | 72.22% |
+| **3-fold Exp3 (best)** | **75.56%** |
+
+**Best result:** 75.56% real accuracy · 87.23% sim · Gap: **11.67 pp** (from 36 pp) · >2/3 of original gap closed
+
+**Cross-robot generalization:** Transfer is bidirectional across physically distinct robots (A→B: 70%, B→A standard: 72%) with as few as 90 fine-tuning samples.
+
+</details>
+
+**Stack:**
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![MATLAB](https://img.shields.io/badge/Simulink-0076A8?style=flat-square&logo=mathworks&logoColor=white)
+![Linux](https://img.shields.io/badge/HPC_A100-FCC624?style=flat-square&logo=linux&logoColor=black)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white)
 
 ---
 
-### `📁 PHM-FoundationModel/` — Fault Diagnosis & Prognosis @ LGI Lab, CentraleSupélec
-> *6-month research project (Oct 2025 – Mar 2026) · Team of 4 · HPC-scale training · Two parallel research tracks*
+### `📁 PHM-FoundationModel/` — Cross-Domain Foundation Model for Fault Diagnosis
+> *MSc Research Project · CentraleSupélec LGI Lab · Oct 2025 – Apr 2026 · Team of 4*
+> **Repo coming soon**
 
-**The core problem:** Traditional PHM models fail to generalize — every new machine or fault type demands a fresh labeled dataset. This mirrors the pre-GPT era in NLP. The goal: a model that pretrains once and transfers everywhere.
+**The core problem:** Traditional PHM models are brittle — a model trained on bearings won't generalize to turbines, and a model trained on one machine type won't transfer to another. Every new domain demands a fresh labeled dataset. This mirrors the pre-GPT era in NLP: task-specific models for everything.
+
+**The goal:** A foundation model that pretrains once on diverse PHM datasets and transfers everywhere — across machines, fault types, and sensor modalities.
 
 <details>
 <summary><code>$ cat phase1_leakage_investigation.md</code></summary>
@@ -111,60 +171,11 @@ Stage 1 → Linear probe      (encoder frozen, head only)
 Stage 2 → Partial unfreeze  (last transformer block)
 Stage 3 → Full unfreeze     (entire encoder)
 ```
-Preserves pretrained representations. Avoids catastrophic forgetting.
 
 </details>
 
 <details>
-<summary><code>$ cat track2_robot_sim_to_real.md</code> &nbsp;← Adnane's track</summary>
-
-<br/>
-
-**Setup:** 4-DOF robot arm · 9 fault classes (healthy + 4 stuck + 4 steady-state error) · 9-channel trajectory signals · Sim data only for training, real robot for eval.
-
-**The gap problem:**
-```bash
-$ python eval.py --model scratch --test real
-# Sim: 81.94%  /  Real: 55.56%  /  Gap: 26.4pp
-
-$ python eval.py --model scratch+gaussian_noise --test real
-# Sim: up       /  Real: 48.89%  /  Gap WIDENS  <- generic noise fails
-```
-
-**Root cause — what makes real != sim:**
-- Actuation delays: sim used fixed 10-step delay → real robot has variable delays
-- Healthy motor noise: sim was deterministic → real has Gaussian steady-state errors
-
-**Physics-informed Simulink augmentation:**
-```python
-holdingTimeIdx  ~ Uniform(2, 30)          # variable actuation delay
-normalMotorErr  ~ Gaussian(mu=0, sigma=1.2)  # discretized to [-3,...,3]
-faultMagnitude  ~ Uniform(10, 50)         # expanded fault range
-```
-
-**Training strategy comparison:**
-
-| Strategy | Sim Acc | Real Acc | Gap |
-|---|---|---|---|
-| A1 — Scratch + Full FT (baseline) | 81.94% | 57.78% | 24.2pp |
-| A2 — Scratch + Head Only | **90.19%** | 61.11% | 29.1pp |
-| A3 — Supervised Pretrain + 25% unfreeze | 82.96% | 67.78% | 15.2pp |
-| **A4 — Supervised Pretrain + 50% unfreeze** | 83.33% | **70.00%** | **13.3pp** ✅ |
-
-> **Key insight:** A2 scores 90.19% sim but only 61.11% real. Fitting the simulation too tightly is **counterproductive**. Pretraining + partial unfreezing gains **+12pp real accuracy**.
-
-**Self-supervised objectives — both collapsed:**
-```bash
-$ python train.py --objective next_token_prediction   # ~11% (random chance)
-$ python train.py --objective masked_token_prediction  # ~11% (random chance)
-# Trajectory fault signatures require labeled pretraining.
-# Generic reconstruction losses don't learn fault-discriminative features.
-```
-
-</details>
-
-<details>
-<summary><code>$ cat track1_multidataset_foundation_model.md</code></summary>
+<summary><code>$ cat phase3_multidataset_pretraining.md</code></summary>
 
 <br/>
 
@@ -175,7 +186,7 @@ $ python train.py --objective masked_token_prediction  # ~11% (random chance)
 
 **Key result:** Multi-dataset pretrained model outperforms single-dataset pretraining on **held-out datasets not seen during pretraining** — early evidence of genuine cross-domain transfer.
 
-**Scale:** 12M+ rows · ~2 hrs/epoch on single GPU · La Ruche HPC (SLURM)
+**Scale:** 12M+ rows · ~2 hrs/epoch · La Ruche HPC (SLURM · 4× A100)
 
 </details>
 
@@ -183,9 +194,18 @@ $ python train.py --objective masked_token_prediction  # ~11% (random chance)
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
 ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white)
-![SciPy](https://img.shields.io/badge/SciPy-8CAAE6?style=flat-square&logo=scipy&logoColor=white)
-![MATLAB](https://img.shields.io/badge/Simulink-0076A8?style=flat-square&logo=mathworks&logoColor=white)
 ![Linux](https://img.shields.io/badge/HPC_SLURM-FCC624?style=flat-square&logo=linux&logoColor=black)
+
+---
+
+### `📁 POLARIS/` — Portfolio Optimization & Learning AI for Risk-Adjusted Strategy
+> *Enterprise-grade AI platform for strategic decision-making — a North Star for steering committees.*
+
+- **Monte Carlo** option evaluation with **CVaR10** risk-adjusted scoring
+- Closed-loop **learning system**: outcome capture → forecast recalibration → scoring adaptation
+- Executive-grade **PDF SteerCo reports**, interactive dashboards & conversational interface
+- Built-in **guardrails**: budget, capacity, compliance & governance checks
+- Stack: `Python` `Pandas` `scikit-learn` `Streamlit` `Plotly` `ReportLab` `Gemini API`
 
 ---
 
@@ -225,35 +245,6 @@ Epoch ≥3   →  Fine-tuning   (full model, layer-wise LR decay)
 **Grad-CAM** visualization — side-by-side (original + heatmap) for model interpretability.
 
 **Distributed training:** DDP-compatible with SLURM (`srun python ...`)
-
-</details>
-
-<details>
-<summary><code>$ tree Melanoma_Detection_ISIC2019/</code></summary>
-
-<br/>
-
-```
-Melanoma_Detection_ISIC2019/
-├── src/
-│   ├── train/
-│   │   ├── train.py              # Training script
-│   │   ├── lightning_module.py   # Lightning module
-│   │   └── gradcam.py            # Grad-CAM script
-│   ├── models/
-│   │   └── combined_model.py     # ResNet + MLP fusion
-│   └── dataset/
-│       └── isic_dataset.py       # Image+metadata dataset
-├── processed/
-│   ├── images_224_nohair/        # Preprocessed images
-│   └── splits/
-│       ├── train.csv
-│       └── val.csv
-├── checkpoints/                  # Best and final models
-├── logs/                         # TensorBoard + CSV logs
-├── requirements.txt
-└── README.md
-```
 
 </details>
 
